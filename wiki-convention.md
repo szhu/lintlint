@@ -1,0 +1,51 @@
+# Wiki convention
+
+A `wiki` branch holds discussion and notes that aren't committed to the project yet. It has history unrelated to `main`, so it can be pushed and pulled (e.g. to continue a discussion from mobile) without touching the real project.
+
+## Setup
+
+Use HTTPS remotes (see pitfalls).
+
+With JJ:
+
+```sh
+cd <repo>
+mkdir -p .worktrees
+jj workspace add --name wiki -r 'root()' .worktrees/wiki
+cd .worktrees/wiki
+jj commit -m "Initial commit"   # empty first commit
+# ...write notes...
+jj commit -m "<message>"
+jj bookmark create wiki -r @-
+jj git push --bookmark wiki
+```
+
+With Git only, check out an orphan `wiki` branch as a worktree at `.worktrees/wiki` instead.
+
+Once set up, the global `~/.gitignore` has `/.worktrees/`.
+
+## Conventions
+
+- **Location:** `<repo>/.worktrees/wiki`. It mirrors Claude Code's `.claude/worktrees`, so Claude Code users recognize the concept, while leaving the folder unmanaged by any tool.
+- **First commit:** An empty `Initial commit` on `root()`, matching how `main` starts.
+- **Attribution:** Wiki commits may include `Co-Authored-By: Claude ... <noreply@anthropic.com>`.
+
+## Locations considered
+
+- **Sibling folder** (`../<repo>.wiki`): Works, but Sean preferred keeping it inside the repo.
+- **`.wiki/`:** About 7.7k files on GitHub live under `.wiki/`, mostly from repos that keep GitHub wiki sources there. Those are finished public docs, which is a different purpose from pre-commit notes.
+- **`.scratch/`:** Very common, and many hits look like AI-agent output (`.scratch/<feature>/PRD.md`, `HANDOFF-*.md`). A future tool could write into the wiki.
+- **`.git/wiki`:** jj and git both ignore it with no config. But git commands run inside it fail with `fatal: this operation must be run in a work tree`, and VS Code hides `.git` by default.
+- **`.claude/worktrees/wiki`:** Claude Code creates and cleans up worktrees there, which is risky for a long-lived checkout.
+- **`.notes`, `.drafts`, `.sidecar`, `.offtree`, ...:** Also viable. `.worktrees` won because it describes the setup and generalizes to other long-lived branches.
+
+## Pitfalls
+
+- **Nested workspaces and git:** jj (0.45) automatically skips a nested folder containing its own `.jj`. Plain `git status` still lists it as untracked, hence the global ignore.
+- **Missing parent folder:** `jj workspace add .worktrees/wiki` fails with "No such file or directory" if `.worktrees/` doesn't exist yet.
+- **Stale SSH remote:** `Permission denied (publickey)` on push came from an old `git@github.com:` origin while everything else uses HTTPS through `gh`. Fix with `jj git remote set-url origin https://github.com/<owner>/<repo>.git` instead of debugging the SSH agent. `gh auth refresh` alone doesn't help an SSH remote.
+- **Adding the empty first commit later:** Inserting it after pushing rewrites history and needs a force push. Start with it.
+- **Moving a workspace:** Recreate it instead of moving the folder. `jj workspace forget wiki`, trash the old folder, then `jj workspace add` at the new path with `-r wiki`. `forget` already discards the old empty working-copy commit.
+- **jj 0.45 CLI differences:** `jj git push` has no `--allow-new`, and `jj git init` / `jj workspace add` don't accept `-q`.
+- **Claude Code's edit guard:** In a background session, the Write/Edit tools refuse paths inside a JJ workspace because the guard only recognizes Git worktrees. Shell writes still work.
+- **GitHub's PR link:** Pushing `wiki` prints a "Create a pull request" link. Ignore it, since `wiki` never merges.
