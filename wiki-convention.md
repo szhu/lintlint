@@ -2,11 +2,13 @@
 
 A `wiki` branch holds discussion and notes that aren't committed to the project yet. It has history unrelated to `main`, so it can be pushed and pulled (e.g. to continue a discussion from mobile) without touching the real project.
 
+These are notes on what has worked so far, not rules. Explicit instructions from Sean take precedence over anything here.
+
 ## Setup
 
-Use HTTPS remotes (see pitfalls).
+So far this has used HTTPS remotes (see pitfalls).
 
-With JJ:
+With JJ, the steps used here were roughly:
 
 ```sh
 cd <repo>
@@ -20,7 +22,7 @@ jj bookmark create wiki -r @-
 jj git push --bookmark wiki
 ```
 
-With Git only, check out an orphan `wiki` branch as a worktree at `.worktrees/wiki` instead.
+With Git only, the equivalent would probably be an orphan `wiki` branch checked out as a worktree at `.worktrees/wiki` (untested).
 
 Once set up, the global `~/.gitignore` has `/.worktrees/`.
 
@@ -43,9 +45,9 @@ Once set up, the global `~/.gitignore` has `/.worktrees/`.
 
 - **Nested workspaces and git:** jj (0.45) automatically skips a nested folder containing its own `.jj`. Plain `git status` still lists it as untracked, hence the global ignore.
 - **Missing parent folder:** `jj workspace add .worktrees/wiki` fails with "No such file or directory" if `.worktrees/` doesn't exist yet.
-- **Stale SSH remote:** `Permission denied (publickey)` on push came from an old `git@github.com:` origin while everything else uses HTTPS through `gh`. Fix with `jj git remote set-url origin https://github.com/<owner>/<repo>.git` instead of debugging the SSH agent. `gh auth refresh` alone doesn't help an SSH remote.
-- **Adding the empty first commit later:** Inserting it after pushing rewrites history and needs a force push. Start with it.
-- **Moving a workspace:** Recreate it instead of moving the folder. `jj workspace forget wiki`, trash the old folder, then `jj workspace add` at the new path with `-r wiki`. `forget` already discards the old empty working-copy commit.
+- **Stale SSH remote:** `Permission denied (publickey)` on push came from an old `git@github.com:` origin while everything else uses HTTPS through `gh`. Switching with `jj git remote set-url origin https://github.com/<owner>/<repo>.git` resolved it, without needing to debug the SSH agent. `gh auth refresh` alone doesn't help an SSH remote.
+- **Adding the empty first commit later:** Inserting it after pushing rewrites history and needs a force push. Starting with it avoids that.
+- **Moving a workspace:** What worked here was recreating it rather than moving the folder: `jj workspace forget wiki`, trashing the old folder, then `jj workspace add` at the new path with `-r wiki`. `forget` already discards the old empty working-copy commit.
 - **jj 0.45 CLI differences:** `jj git push` has no `--allow-new`, and `jj git init` / `jj workspace add` don't accept `-q`.
 - **Claude Code's edit guard:** In a background session, the Write/Edit tools refuse paths inside a JJ workspace because the guard only recognizes Git worktrees. Shell writes still work.
-- **GitHub's PR link:** Pushing `wiki` prints a "Create a pull request" link. Ignore it, since `wiki` never merges.
+- **GitHub's PR link:** Pushing `wiki` prints a "Create a pull request" link. It's probably safe to ignore, since `wiki` isn't meant to merge.
