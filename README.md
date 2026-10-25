@@ -15,7 +15,7 @@ Sean:
 State of the earlier attempts:
 
 - Bookmark `attempt-1-as-code`: A Deno CLI with code-based `facts/` (ESLint and Prettier config readers) and `rules/` (e.g. enabled ESLint rules, extends, Prettier plugins).
-- Uncommitted working copy on `main` in the code checkout: A slimmer restart. `bin/lintlint` -> `main.ts` parses `.lintlint.md`, a markdown checklist of standards (e.g. "ESLint config exists", "Consistent quote style enforced"). Nothing evaluates the checklist against a project yet.
+- Branch `wip/2024-07-markdown-checklist` (previously the uncommitted working copy on `main`): A slimmer restart. `bin/lintlint` -> `main.ts` parses `.lintlint.md`, a markdown checklist of standards (e.g. "ESLint config exists", "Consistent quote style enforced"). Nothing evaluates the checklist against a project yet.
 
 Claude's read (unconfirmed): Mechanical checks needed every project to put things in the same place so code could find them. An AI checker could read each project as it is and judge it against the intent of a plain-language checklist, which removes the need for a uniform structure.
 
