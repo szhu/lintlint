@@ -24,7 +24,16 @@ jj git push --bookmark wiki
 
 To recreate the workspace in a fresh clone where `wiki` already exists, `mkdir -p .worktrees && jj workspace add --name wiki -r wiki .worktrees/wiki` should be enough.
 
-With Git only, the equivalent would probably be an orphan `wiki` branch checked out as a worktree at `.worktrees/wiki` (untested).
+With Git only, recreating the worktree in a fresh clone where `wiki` already exists worked like this (in a Claude Code cloud session):
+
+```sh
+cd <repo>
+git fetch origin wiki
+mkdir -p .worktrees
+git worktree add -B wiki .worktrees/wiki origin/wiki
+```
+
+The folder layout matches the JJ setup; the only difference is that `.worktrees/wiki` holds a `.git` file pointing back to `<repo>/.git` instead of a `.jj/` folder. Starting a `wiki` branch from scratch with Git only would probably be an orphan branch checked out the same way (untested).
 
 Once set up, the global `~/.gitignore` has `/.worktrees/`.
 
@@ -53,4 +62,7 @@ Once set up, the global `~/.gitignore` has `/.worktrees/`.
 - **Moving a workspace:** What worked here was recreating it rather than moving the folder: `jj workspace forget wiki`, trashing the old folder, then `jj workspace add` at the new path with `-r wiki`. `forget` already discards the old empty working-copy commit.
 - **jj 0.45 CLI differences:** `jj git push` has no `--allow-new`, and `jj git init` / `jj workspace add` don't accept `-q`.
 - **Claude Code's edit guard:** In a background session, the Write/Edit tools refuse paths inside a JJ workspace because the guard only recognizes Git worktrees. Shell writes still work.
+- **Global ignore file location:** Git doesn't read `~/.gitignore` on its own (its default is `~/.config/git/ignore`). On a machine without it set up, `git config --global core.excludesFile ~/.gitignore` was needed.
+- **Branches missing from a fresh clone:** The clone in a Claude Code cloud session only had `main`; `wiki` and the other branches showed up after `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.
+- **"The wiki" vs. GitHub's wiki:** Asked to clone "the wiki", Claude first tried GitHub's separate `<repo>.wiki.git`, which isn't this branch (and wasn't reachable from the cloud session).
 - **GitHub's PR link:** Pushing `wiki` prints a "Create a pull request" link. It's probably safe to ignore, since `wiki` isn't meant to merge.

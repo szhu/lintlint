@@ -32,3 +32,7 @@ See [wiki-convention.md](wiki-convention.md) for the setup, naming decisions and
 ### 2026-10-25: Parking the uncommitted work
 
 The previously uncommitted restart now lives on `wip/2024-07-markdown-checklist`, backdated to its last edit. See [wip-branches.md](wip-branches.md) for the naming and dating conventions used.
+
+### 2026-10-25: Git-only wiki checkout
+
+Set up the wiki in a Claude Code cloud session, which has no jj. It's a plain git worktree at the same `.worktrees/wiki` location; Sean confirmed the location is what mattered. The steps and new pitfalls are in [wiki-convention.md](wiki-convention.md).
