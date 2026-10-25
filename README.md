@@ -19,7 +19,7 @@ State of the earlier attempts:
 
 Claude's read (unconfirmed): Mechanical checks needed every project to put things in the same place so code could find them. An AI checker could read each project as it is and judge it against the intent of a plain-language checklist, which removes the need for a uniform structure.
 
-Open question: What should come out of the next session -- talk through the design, build a rough prototype (an agent that reads `.lintlint.md` and reports pass/fail on a real project), or decide whether to keep this repo or start fresh?
+Possible next step (Claude's framing, unconfirmed): What should come out of the next session -- talk through the design, build a rough prototype (an agent that reads `.lintlint.md` and reports pass/fail on a real project), or decide whether to keep this repo or start fresh?
 
 ### 2026-10-25: Wiki convention
 

@@ -42,6 +42,7 @@ Once set up, the global `~/.gitignore` has `/.worktrees/`.
 - **Location:** `<repo>/.worktrees/wiki`. It mirrors Claude Code's `.claude/worktrees`, so Claude Code users recognize the concept, while leaving the folder unmanaged by any tool.
 - **First commit:** An empty `Initial commit` on `root()`, matching how `main` starts.
 - **Attribution:** Wiki commits may include `Co-Authored-By: Claude ... <noreply@anthropic.com>`.
+- **Questions Claude raises:** Labels like "open question" imply Sean cares about the answer, when often Claude inferred that the question matters. Sean suggested hedging these too, e.g. "Possible next step (Claude's framing, unconfirmed)", the same way Claude's interpretations are marked "Claude's read (unconfirmed)".
 
 ## Locations considered
 
