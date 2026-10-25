@@ -2,7 +2,7 @@
 
 A `wiki` branch holds discussion and notes that aren't committed to the project yet. It has history unrelated to `main`, so it can be pushed and pulled (e.g. to continue a discussion from mobile) without touching the real project.
 
-These are notes on what has worked so far, not rules. Explicit instructions from Sean take precedence over anything here.
+These are notes on what has worked so far, not rules. Explicit instructions from Sean take precedence over anything here. The hedged wording is deliberate: the goal, in Sean's words, is "to make it harder by default for it to override any explicit how-tos I give it."
 
 ## Setup
 
@@ -21,6 +21,8 @@ jj commit -m "<message>"
 jj bookmark create wiki -r @-
 jj git push --bookmark wiki
 ```
+
+To recreate the workspace in a fresh clone where `wiki` already exists, `mkdir -p .worktrees && jj workspace add --name wiki -r wiki .worktrees/wiki` should be enough.
 
 With Git only, the equivalent would probably be an orphan `wiki` branch checked out as a worktree at `.worktrees/wiki` (untested).
 
@@ -47,6 +49,7 @@ Once set up, the global `~/.gitignore` has `/.worktrees/`.
 - **Missing parent folder:** `jj workspace add .worktrees/wiki` fails with "No such file or directory" if `.worktrees/` doesn't exist yet.
 - **Stale SSH remote:** `Permission denied (publickey)` on push came from an old `git@github.com:` origin while everything else uses HTTPS through `gh`. Switching with `jj git remote set-url origin https://github.com/<owner>/<repo>.git` resolved it, without needing to debug the SSH agent. `gh auth refresh` alone doesn't help an SSH remote.
 - **Adding the empty first commit later:** Inserting it after pushing rewrites history and needs a force push. Starting with it avoids that.
+- **Stale local git ref after a force push:** After rewriting and force-pushing `wiki`, the local git branch `refs/heads/wiki` stayed at the old commit for a while (jj showed `wiki@git` as behind, and `jj git export` said "No export needed in colocated workspaces"). It had caught up by a later `jj git fetch`; the cause wasn't confirmed.
 - **Moving a workspace:** What worked here was recreating it rather than moving the folder: `jj workspace forget wiki`, trashing the old folder, then `jj workspace add` at the new path with `-r wiki`. `forget` already discards the old empty working-copy commit.
 - **jj 0.45 CLI differences:** `jj git push` has no `--allow-new`, and `jj git init` / `jj workspace add` don't accept `-q`.
 - **Claude Code's edit guard:** In a background session, the Write/Edit tools refuse paths inside a JJ workspace because the guard only recognizes Git worktrees. Shell writes still work.

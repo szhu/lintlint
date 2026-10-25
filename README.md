@@ -28,3 +28,7 @@ Set up this `wiki` branch at `.worktrees/wiki`. Sean on why the notes belong her
 > This wiki convention and the pitfalls are ran into might be useful for this project itself
 
 See [wiki-convention.md](wiki-convention.md) for the setup, naming decisions and pitfalls.
+
+### 2026-10-25: Parking the uncommitted work
+
+The previously uncommitted restart now lives on `wip/2024-07-markdown-checklist`, backdated to its last edit. See [wip-branches.md](wip-branches.md) for the naming and dating conventions used.
