@@ -36,3 +36,16 @@ The previously uncommitted restart now lives on `wip/2024-07-markdown-checklist`
 ### 2026-10-25: Git-only wiki checkout
 
 Set up the wiki in a Claude Code cloud session, which has no jj. It's a plain git worktree at the same `.worktrees/wiki` location; Sean confirmed the location is what mattered. The steps and new pitfalls are in [wiki-convention.md](wiki-convention.md).
+
+### 2026-10-26: Checklist shape
+
+Sean, on what lintlint should be:
+
+> I think what I want is a checklist. That checklist might have grouping or nesting or some simple structure like that. [...] that's how the report should look like. Each of the items, it could just be a plain text thing now, which is kind of cool. Previously, I'd assume it'd have to be a little bit of code. But it potentially can have more details. I don't even think most of them need more details. However, each item can potentially have a fixer or like a way to apply things. And that would be either code or like a skill, which in my mind is just AI code. [...] It could be deterministic instructions. It could be AI instructions. Contains some instructions for how to achieve that result. Like I can say I want to set up React, but I probably want to set it up a particular way. I think the most common way I want to do it now is just to point to a particular repo and say this is the reference one.
+
+Claude's summary (unconfirmed):
+
+- The checklist is also the report: same groups and items, with each item checked or not.
+- An item is usually one line of plain text. It can optionally carry more detail.
+- An item can optionally carry instructions for getting to that result, either deterministic (code) or AI (e.g. a skill). The most common kind is expected to be a pointer to a reference repo.
+- The 2024 `.lintlint.md` on `wip/2024-07-markdown-checklist` already has this shape (headings as groups, `- [ ]` items as plain text), minus the fix instructions.
